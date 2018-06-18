@@ -1,11 +1,12 @@
 import os
 import numpy as np
+import sys
 
 output_path = 'outputs'
 species=[]
 
 for filename in os.listdir(output_path):
-    species.append(filename.strip('.log'))
+    species.append(filename.strip('.out'))
 
 file = open("Reactions.dat","r")
 output = open("scratch/ReactionMatrix.dat","w")
@@ -24,4 +25,15 @@ for line in file:
     output.write(str(tmp2)+'\n')
 
 file.close()
+output.close()
+
+output = open("scratch/concentrations.dat","w")
+for i in range(0,len(species)):
+    if str(species[i])=='H2O':
+      output.write(str(species[i]) + '  55.6 \n')
+    if str(species[i])=='OH':
+      output.write(str(species[i]) + '  '+str(sys.argv[1])+' \n')
+    if str(species[i])!='OH' and str(species[i])!='H2O':
+      output.write(str(species[i])+'  1.0 \n')
+
 output.close()

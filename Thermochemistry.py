@@ -1,4 +1,5 @@
 from subprocess import Popen, STDOUT, PIPE
+import sys
 import math
 import os
 
@@ -246,7 +247,7 @@ def Moment_of_Intertia():
     Izz = Izz
 
     # Open the file with the moment of the inertia matrix
-    file = open("scratch/momentinertia.dat", "w")
+    file = open("momentinertia.dat", "w")
 
     # Write the inertia matrix into the file
     file.write(str(Ixx) + '\n')
@@ -441,14 +442,15 @@ for filename in os.listdir(output_path):
 #
     species=''
 
-    species=str(filename.strip('.log'))
+    species=str(filename.strip('.out'))
     path=str(output_path)+str(filename)
     output = open("scratch/Energy_"+str(species)+".dat","w")
-    Gaussian(path)
-    #ADF()
+    ADF(path)
     Moment_of_Intertia()
-    Frequency_Replacement(50)
+    Frequency_Replacement(100)
 
+    T=float(sys.argv[1])
+    P=float(sys.argv[2])
     Thermochemistry(T,P)
     output.write(str(H)+' '+str(G))
     output.close()
